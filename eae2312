@@ -1,0 +1,38 @@
+if not Settings.Lighting then return end
+
+local Lighting = game:GetService("Lighting")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Objects = {}
+local function c(class, props, parent)
+    local obj = Instance.new(class)
+    for k, v in pairs(props) do obj[k] = v end
+    obj.Parent = parent
+    table.insert(Objects, obj) -- Lưu lại để xoá sau này
+    return obj
+end
+
+-- Khởi tạo hiệu ứng
+c("SunRaysEffect", {Intensity = 0.05, Spread = 0.7, Enabled = true}, Lighting)
+c("SunRaysEffect", {Intensity = 0.1, Spread = 0.63, Enabled = true}, Lighting)
+c("SunRaysEffect", {Intensity = 0.25, Spread = 1, Enabled = true}, Lighting)
+c("DepthOfFieldEffect", {FocusDistance = 15, InFocusRadius = 50, NearIntensity = 0.75, FarIntensity = 0.15, Enabled = true}, Lighting)
+c("ColorCorrectionEffect", {Brightness = 0.05, Contrast = 0.1, Saturation = 0.1, TintColor = Color3.fromRGB(230, 230, 230), Enabled = true}, Lighting)
+c("ColorCorrectionEffect", {Brightness = 0, Contrast = -0.1, Saturation = 0, TintColor = Color3.fromRGB(255, 254, 226), Enabled = true}, Lighting)
+c("BlurEffect", {Size = 1.2, Enabled = true}, Lighting)
+c("BlurEffect", {Size = 1.2, Enabled = true}, Lighting)
+c("BlurEffect", {Size = 2, Enabled = true}, Lighting)
+c("BloomEffect", {Intensity = 1, Size = 24, Threshold = 2, Enabled = true}, Lighting)
+c("Sky", {CelestialBodiesShown = false, SkyboxBk = "rbxassetid://8959270613", SkyboxDn = "rbxassetid://8959328839", SkyboxFt = "rbxassetid://8959269803", SkyboxLf = "rbxassetid://8959270223", SkyboxRt = "rbxassetid://8959269319", SkyboxUp = "rbxassetid://8959268207", StarCount = 0, SunAngularSize = 0}, Lighting)
+c("Atmosphere", {Density = 0.395, Color = Color3.fromRGB(200, 170, 108), Decay = Color3.fromRGB(92, 60, 14), Glare = 0, Haze = 0}, Lighting)
+c("Sound", {SoundId = "rbxassetid://9118747853", Volume = 0.5, Looped = true, Playing = true}, workspace)
+if LocalPlayer then
+    local conn
+    conn = LocalPlayer.CharacterAdded:Connect(function()
+        for _, v in ipairs(Objects) do
+            if v then v:Destroy() end
+        end
+        Objects = {}
+        conn:Disconnect()
+    end)
+end
